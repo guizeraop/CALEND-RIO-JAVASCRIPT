@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendário Professor Denilson</title>
+    <style>
+        *{
+            margin: 0%;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            display: block;
+            text-align: center;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: auto;
+        }
+        .calendar {
+            margin: auto;
+            width: 350px;
+            border: 1px solid #757575;
+            padding: 20px;
+            box-shadow: 0 0 10px rgb(255, 123, 0);
+        }
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .calendar-header button {
+            background-color: #ff7b00;
+            color: #020202;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+        .calendar-header button:disabled {
+            background-color: #ff5e00;
+        }
+        .calendar-header h3 {
+            margin: 0;
+            font-size: 1.5em;
+        }
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+        }
+        .calendar-grid div {
+            text-align: center;
+            padding: 10px;
+            background-color: #c29158;
+            border-radius: 4px;
+        }
+        .calendar-grid .day {
+            background-color: #ff7300;
+            color: #fff;
+        }
+        #introduction {
+            background: #ff7b00;
+            height: 100px;
+        }
+        #introduction>h1{
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div id="introduction">
+            <h1>Calendário Do Guizera</h1>
+        </div>
+    </header>
+    <main>
+        <div class="calendar">
+            <div class="calendar-header">
+                <button id="prevMonth">&lt;</button>
+                <h3 id="monthYear"></h3>
+                <button id="nextMonth">&gt;</button>
+            </div>
+            <div class="calendar-grid" id="calendarDays">
+                <!-- Os dias do calendário serão gerados aqui -->
+            </div>
+        </div>
+    </main>
+
+<footer>
+    <div id="email-section">
+        <p>Envie para contato um email abaixo:</p>
+        <textarea name="" id="" style="width: 450px; height: 150px;"></textarea>
+    </div>
+</footer>
+
+<script>
+    const calendarDays = document.getElementById('calendarDays');
+    const monthYear = document.getElementById('monthYear');
+    const prevMonth = document.getElementById('prevMonth');
+    const nextMonth = document.getElementById('nextMonth');
+
+    const today = new Date();
+    let currentMonth = today.getMonth();
+    let currentYear = today.getFullYear();
+
+    const months = [
+        'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+        'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+    ];
+
+    function generateCalendar(month, year) {
+        calendarDays.innerHTML = '';
+        monthYear.textContent = `${months[month]} ${year}`;
+
+        const firstDay = new Date(year, month, 1).getDay();
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+        // Preencher os dias vazios antes do primeiro dia do mês
+        for (let i = 0; i < firstDay; i++) {
+            const emptyCell = document.createElement('div');
+            calendarDays.appendChild(emptyCell);
+        }
+
+        // Preencher os dias do mês
+        for (let i = 1; i <= daysInMonth; i++) {
+            const dayCell = document.createElement('div');
+            dayCell.textContent = i;
+            if (i === today.getDate() && month === today.getMonth() && year === today.getFullYear()) {
+                dayCell.classList.add('day');
+            }
+            calendarDays.appendChild(dayCell);
+        }
+    }
+
+    prevMonth.addEventListener('click', () => {
+        if (currentMonth === 0) {
+            currentMonth = 11;
+            currentYear--;
+        } else {
+            currentMonth--;
+        }
+        generateCalendar(currentMonth, currentYear);
+    });
+
+    nextMonth.addEventListener('click', () => {
+        if (currentMonth === 11) {
+            currentMonth = 0;
+            currentYear++;
+        } else {
+            currentMonth++;
+        }
+        generateCalendar(currentMonth, currentYear);
+    });
+
+    generateCalendar(currentMonth, currentYear);
+</script>
+
+</body>
+</html>
+
